@@ -11,11 +11,23 @@
             box-sizing: border-box;
         }
 
+        html {
+            scroll-behavior: smooth;
+            scroll-padding-top: 80px;
+            overflow-x: hidden;
+        }
+
         body {
             font-family: 'Segoe UI', Tahoma, Geneva, Verdana, sans-serif;
             line-height: 1.6;
             color: #333;
             background-color: #f8f9fa;
+            overflow-x: hidden;
+        }
+
+        img {
+            display: block;
+            max-width: 100%;
         }
 
         body.rtl {
@@ -44,6 +56,7 @@
             display: flex;
             justify-content: space-between;
             align-items: center;
+            gap: 1rem;
         }
 
         .logo {
@@ -81,6 +94,7 @@
             border-radius: 5px;
             cursor: pointer;
             transition: background 0.3s;
+            min-height: 44px;
         }
 
         .lang-btn.active {
@@ -95,6 +109,9 @@
             color: white;
             font-size: 1.5rem;
             cursor: pointer;
+            width: 44px;
+            height: 44px;
+            flex: 0 0 44px;
         }
 
         .mobile-menu {
@@ -133,7 +150,8 @@
                         url('data:image/svg+xml,<svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 1200 600"><rect fill="%23e8f4f8" width="1200" height="600"/><path fill="%23d1ecf1" d="M0,300L50,280C100,260,200,220,300,200C400,180,500,180,600,160C700,140,800,100,900,120C1000,140,1100,220,1150,260L1200,300V600H1150C1100,600,1000,600,900,600C800,600,700,600,600,600C500,600,400,600,300,600C200,600,100,600,50,600H0V300Z"/></svg>');
             background-size: cover;
             background-position: center;
-            height: 100vh;
+            min-height: calc(100vh - 80px);
+            min-height: calc(100svh - 80px);
             display: flex;
             align-items: center;
             text-align: center;
@@ -307,13 +325,29 @@
 
         .about-image {
             height: 300px;
-            background: linear-gradient(45deg, #f39c12, #e74c3c);
             border-radius: 10px;
-            display: flex;
-            align-items: center;
-            justify-content: center;
+            overflow: hidden;
+            position: relative;
+            background: #e0e6ed;
+            box-shadow: 0 10px 30px rgba(0,0,0,0.12);
+        }
+
+        .about-image img {
+            width: 100%;
+            height: 100%;
+            object-fit: cover;
+            object-position: center 42%;
+        }
+
+        .about-image figcaption {
+            position: absolute;
+            right: 0;
+            bottom: 0;
+            left: 0;
+            padding: 1rem;
             color: white;
-            font-size: 1.2rem;
+            font-weight: 600;
+            background: linear-gradient(transparent, rgba(0,0,0,0.8));
         }
 
         /* Contact */
@@ -488,6 +522,18 @@
 
         /* Responsive */
         @media (max-width: 768px) {
+            .header {
+                padding: 0.7rem 0;
+            }
+
+            .container {
+                padding-inline: 16px;
+            }
+
+            .logo {
+                font-size: 1.5rem;
+            }
+
             .nav-menu {
                 display: none;
             }
@@ -515,6 +561,16 @@
                 grid-template-columns: 1fr;
             }
 
+            .gallery-item {
+                height: auto;
+                aspect-ratio: 4 / 3;
+            }
+
+            .gallery-overlay {
+                transform: translateY(0);
+                padding-top: 2.5rem;
+            }
+
             .services-grid {
                 grid-template-columns: 1fr;
             }
@@ -529,8 +585,22 @@
             }
 
             .about-image {
-                height: 250px;
+                height: auto;
+                aspect-ratio: 4 / 3;
                 order: -1;
+            }
+
+            .contact-item {
+                align-items: flex-start;
+            }
+
+            .contact-item a {
+                overflow-wrap: anywhere;
+            }
+
+            .form-group input,
+            .form-group textarea {
+                font-size: 16px;
             }
 
             .modal-content {
@@ -548,11 +618,30 @@
         @media (max-width: 480px) {
             .hero {
                 margin-top: 70px;
-                height: 80vh;
+                min-height: calc(100svh - 70px);
+                height: auto;
+                padding-block: 3rem;
             }
 
             .hero-content h1 {
-                font-size: 1.8rem;
+                font-size: clamp(1.7rem, 9vw, 2.2rem);
+            }
+
+            .nav-container {
+                gap: 0.4rem;
+            }
+
+            .logo {
+                font-size: 1.3rem;
+            }
+
+            .lang-switcher {
+                gap: 0.25rem;
+                margin-inline-start: auto;
+            }
+
+            .lang-btn {
+                padding: 0.5rem 0.65rem;
             }
 
             .btn-primary {
@@ -570,6 +659,10 @@
 
             .contact-info {
                 padding: 1.5rem;
+            }
+
+            .map-container {
+                height: 250px;
             }
 
             .footer p {
@@ -594,10 +687,10 @@
                     </ul>
                 </nav>
                 <div class="lang-switcher">
-                    <button class="lang-btn active" onclick="switchLanguage('nl')">NL</button>
-                    <button class="lang-btn" onclick="switchLanguage('ar')">AR</button>
+                    <button class="lang-btn active" type="button" data-lang="nl" onclick="switchLanguage('nl', this)" aria-label="Nederlands">NL</button>
+                    <button class="lang-btn" type="button" data-lang="ar" onclick="switchLanguage('ar', this)" aria-label="العربية">AR</button>
                 </div>
-                <button class="mobile-menu-btn" onclick="toggleMobileMenu()">☰</button>
+                <button class="mobile-menu-btn" type="button" onclick="toggleMobileMenu()" aria-controls="mobileMenu" aria-expanded="false" aria-label="Menu">☰</button>
             </div>
         </div>
     </header>
@@ -685,19 +778,19 @@
                     </div>
                 </div>
                 
-                <div class="gallery-item" onclick="openModal('gallery/kk (5).jpeg', 'Hasan aan het werk', 'حسن في العمل', 'Ervaren vakman', 'حرفي خبير')">
-                    <img src="gallery/kk (5).jpeg" alt="Hasan aan het werk" loading="lazy">
+                <div class="gallery-item" onclick="openModal('gallery/kk (6).jpeg', 'Hasan aan het werk', 'حسن في العمل', 'Ervaren vakman', 'حرفي خبير')">
+                    <img src="gallery/kk (6).jpeg" alt="Hasan aan het werk" loading="lazy">
                     <div class="gallery-overlay">
                         <h4 data-nl="Hasan aan het werk" data-ar="حسن في العمل">Hasan aan het werk</h4>
                         <p data-nl="Ervaren vakman" data-ar="حرفي خبير">Ervaren vakman</p>
                     </div>
                 </div>
                 
-                <div class="gallery-item" onclick="openModal('gallery/kk (6).jpeg', 'Afgewerkt project', 'مشروع مكتمل', 'Tevreden klant', 'عميل راضي')">
-                    <img src="gallery/kk (6).jpeg" alt="Afgewerkt project" loading="lazy">
+                <div class="gallery-item" onclick="openModal('gallery/kk (5).jpeg', 'Binnenrenovatie', 'تجديد داخلي', 'Wanden en plafond strak afgewerkt', 'تشطيب الجدران والسقف بعناية')">
+                    <img src="gallery/kk (5).jpeg" alt="Binnenrenovatie" loading="lazy">
                     <div class="gallery-overlay">
-                        <h4 data-nl="Afgewerkt project" data-ar="مشروع مكتمل">Afgewerkt project</h4>
-                        <p data-nl="Tevreden klant" data-ar="عميل راضي">Tevreden klant</p>
+                        <h4 data-nl="Binnenrenovatie" data-ar="تجديد داخلي">Binnenrenovatie</h4>
+                        <p data-nl="Wanden en plafond strak afgewerkt" data-ar="تشطيب الجدران والسقف بعناية">Wanden en plafond strak afgewerkt</p>
                     </div>
                 </div>
 
@@ -799,9 +892,10 @@
                         <li data-nl="Garantie op werk" data-ar="ضمان على العمل">Garantie op werk</li>
                     </ul>
                 </div>
-                <div class="about-image">
-                    <span data-nl="Hasan aan het werk" data-ar="حسن في العمل">Hasan aan het werk</span>
-                </div>
+                <figure class="about-image">
+                    <img src="gallery/kk (6).jpeg" alt="Hasan aan het werk" loading="lazy">
+                    <figcaption data-nl="Hasan aan het werk" data-ar="حسن في العمل">Hasan aan het werk</figcaption>
+                </figure>
             </div>
         </div>
     </section>
@@ -842,7 +936,7 @@
                 
                 <div class="contact-form">
                     <div class="form-success" id="formSuccess">
-                        <span data-nl="Bedankt! Uw bericht is verzonden." data-ar="شكراً! تم إرسال رسالتك.">Bedankt! Uw bericht is verzonden.</span>
+                        <span data-nl="Uw e-mailprogramma is geopend. Controleer de gegevens en klik daar op Verzenden." data-ar="تم فتح برنامج البريد لديك. راجع البيانات ثم اضغط إرسال من هناك.">Uw e-mailprogramma is geopend. Controleer de gegevens en klik daar op Verzenden.</span>
                     </div>
                     
                     <form id="contactForm" onsubmit="sendEmail(event)">
@@ -906,17 +1000,18 @@
     <script>
         let currentLanguage = 'nl';
 
-        function switchLanguage(lang) {
+        function switchLanguage(lang, button) {
             currentLanguage = lang;
             
             // Update active button
             document.querySelectorAll('.lang-btn').forEach(btn => {
                 btn.classList.remove('active');
             });
-            event.target.classList.add('active');
+            button.classList.add('active');
             
             // Update HTML lang and dir attributes
             document.documentElement.lang = lang;
+            document.documentElement.dir = lang === 'ar' ? 'rtl' : 'ltr';
             document.body.classList.toggle('rtl', lang === 'ar');
             
             // Update all text content
@@ -931,13 +1026,15 @@
         // Toggle mobile menu
         function toggleMobileMenu() {
             const mobileMenu = document.getElementById('mobileMenu');
-            mobileMenu.classList.toggle('active');
+            const isOpen = mobileMenu.classList.toggle('active');
+            document.querySelector('.mobile-menu-btn').setAttribute('aria-expanded', String(isOpen));
         }
 
         // Close mobile menu when clicking on a link
         document.querySelectorAll('.mobile-menu a').forEach(link => {
             link.addEventListener('click', () => {
                 document.getElementById('mobileMenu').classList.remove('active');
+                document.querySelector('.mobile-menu-btn').setAttribute('aria-expanded', 'false');
             });
         });
 
@@ -1025,9 +1122,8 @@ ${message}
             // Open email client
             window.location.href = mailtoLink;
             
-            // Show success message
+            // A mailto link cannot confirm delivery; explain the final step accurately.
             successMsg.style.display = 'block';
-            form.reset();
             
             // Hide success message after 5 seconds
             setTimeout(() => {
